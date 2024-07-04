@@ -1,7 +1,7 @@
 This is [Dustin Sallings](https://github.com/dustin) OCaml CDB library, pulled from the 2007 
 wayback machine.
 
-It has been updated to work with OCaml 5.2.0 by [Jesse](https://github.com/createthis/ocaml-cdb).
+It has been updated to work with OCaml 5.2.0 by [Jesse](https://github.com/createthis).
 
 # What is CDB?
 
