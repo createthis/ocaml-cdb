@@ -4,50 +4,44 @@ OCAMLMKTOP=ocamlmktop
 OCAMLOPT=ocamlopt
 OCAMLC=ocamlc
 
-PARTS=extstring.cmx fileutils.cmx lru.cmx linkedlist.cmx base64.cmx cdb.cmx \
-	netstring.cmx extlist.cmx extoption.cmx extstream.cmx math.cmx
+PARTS=cdb.cmx
+MAIN_FILE=main.ml
+EXECUTABLE=my_program
 
 .SUFFIXES: .ml .mli .cmi .cmx
 
 .PHONY: $(PARTS)
 
-all: libspy docs
+all: libcdb docs $(EXECUTABLE)
 
 testtop: $(PARTS)
-	$(OCAMLMKTOP) -o testtop unix.cma \
-		fileutils.cmo extstring.cmo extlist.cmo extoption.cmo \
-		extstream.cmo linkedlist.cmo lru.cmo base64.cmo \
-		cdb.cmo netstring.cmo
+	$(OCAMLMKTOP) -o testtop \
+		cdb.cmo
 
-libspy: $(PARTS)
-	$(MKLIB) -o spy \
-		fileutils.cmo extstring.cmo extlist.cmo extoption.cmo \
-		extstream.cmo linkedlist.cmo lru.cmo base64.cmo \
-		cdb.cmo netstring.cmo math.cmo \
-		fileutils.cmx extstring.cmx extlist.cmx extoption.cmx \
-		extstream.cmx linkedlist.cmx lru.cmx base64.cmx \
-		cdb.cmx netstring.cmx math.cmx
-	rm -f libspy.a
-	ln spy.a libspy.a
+libcdb: $(PARTS)
+	$(MKLIB) -o cdb \
+		cdb.cmo \
+		cdb.cmx
+	rm -f libcdb.a
+	ln cdb.a libcdb.a
 
+$(EXECUTABLE): libcdb $(MAIN_FILE)
+	$(OCAMLC) -o $(EXECUTABLE) cdb.cmo $(MAIN_FILE)
 
 docs: $(PARTS)
 	mkdir -p doc
-	ocamldoc -t "Dustin's OCaml Docs" -keep-code -colorize-code -d doc -html \
+	ocamldoc -t "CDB OCaml Docs" -keep-code -colorize-code -d doc -html \
 		*.mli *.ml
 
-install-docs: docs
-	cp doc/* /afs/spy.net/home/dustin/public_html/projects/ocaml/doc
-
 clean:
-	rm -rf testtop *.a *.cma *.cmxa *.cmx *.cmi *.cmo *.o doc
+	rm -rf testtop *.a *.cma *.cmxa *.cmx *.cmi *.cmo *.o doc $(EXECUTABLE)
 
-# .ml.mli:
-	# $(OCAMLOPT) -i $< > $@
+.ml.mli:
+	$(OCAMLOPT) -i $< > $@
 
 .mli.cmi: $<
 	$(MKLIB) $< `echo $< | sed s/.mli/.ml/`
 
 # Deps created by ocamldep
-cdb.cmo: extoption.cmi cdb.cmi 
-cdb.cmx: extoption.cmx cdb.cmi 
+cdb.cmo: cdb.cmi 
+cdb.cmx: cdb.cmi 

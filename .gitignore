@@ -1,0 +1,14 @@
+*.cma
+*.cmo
+*.cmi
+*.a
+*.cmxa
+*.cmx
+*.o
+my_program
+test.cdb
+my_cdb.cdb
+
+# vim
+**/*.swp
+*.swp

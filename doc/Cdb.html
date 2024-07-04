@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="Start" href="index.html">
+<link rel="next" href="Main.html">
+<link rel="Up" href="index.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Cdb" rel="Chapter" href="Cdb.html">
+<link title="Main" rel="Chapter" href="Main.html"><link title="Building a CDB " rel="Section" href="#1_BuildingaCDB">
+<link title="Iterating a CDB " rel="Section" href="#1_IteratingaCDB">
+<link title="Searching " rel="Section" href="#1_Searching">
+<title>CDB OCaml Docs : Cdb</title>
+</head>
+<body>
+<div class="navbar">&nbsp;<a class="up" href="index.html" title="Index">Up</a>
+&nbsp;<a class="post" href="Main.html" title="Main">Next</a>
+</div>
+<h1>Module <a href="type_Cdb.html">Cdb</a> (<a href="code_Cdb.html">.ml</a>)</h1>
+
+<pre><span id="MODULECdb"><span class="keyword">module</span> Cdb</span>: <code class="code"><span class="keyword">sig</span></code> <a href="Cdb.html">..</a> <code class="code"><span class="keyword">end</span></code></pre><div class="info module top">
+<div class="info-desc">
+<p>CDB Implementation.
+ <a href="http://cr.yp.to/cdb/cdb.txt"> http://cr.yp.to/cdb/cdb.txt</a></p>
+</div>
+</div>
+<hr width="100%">
+
+<pre><span id="VALhash"><span class="keyword">val</span> <a href="code_VALCdb.hash.html">hash</a></span> : <code class="type">string -&gt; int32</code></pre><div class="info ">
+<div class="info-desc">
+<h2 id="1_Utilities">Utilities</h2></div>
+</div>
+<h2 id="1_BuildingaCDB">Building a CDB </h2>
+<pre><code><span id="TYPEcdb_creator"><span class="keyword">type</span> <code class="type"></code>cdb_creator</span> = {</code></pre><table class="typetable">
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code><span id="TYPEELTcdb_creator.table_count">table_count</span>&nbsp;: <code class="type">int array</code>;</code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code><span class="keyword">mutable&nbsp;</span><span id="TYPEELTcdb_creator.pointers">pointers</span>&nbsp;: <code class="type">(Stdlib.Int32.t * Stdlib.Int32.t) list</code>;</code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code><span id="TYPEELTcdb_creator.out">out</span>&nbsp;: <code class="type">Stdlib.out_channel</code>;</code></td>
+
+</tr></table>
+<code>}</code>
+
+<div class="info ">
+<div class="info-desc">
+<p>CDB creation handle.</p>
+</div>
+</div>
+
+
+<pre><span id="VALopen_out"><span class="keyword">val</span> <a href="code_VALCdb.open_out.html">open_out</a></span> : <code class="type">string -&gt; <a href="Cdb.html#TYPEcdb_creator">cdb_creator</a></code></pre><div class="info ">
+<div class="info-desc">
+<p>Open a cdb creator for writing.</p>
+</div>
+</div>
+<div class="param_info"><code class="code">fn</code> : the file to write</div>
+
+<pre><span id="VALcdb_creator_of_out_channel"><span class="keyword">val</span> <a href="code_VALCdb.cdb_creator_of_out_channel.html">cdb_creator_of_out_channel</a></span> : <code class="type">Stdlib.out_channel -&gt; <a href="Cdb.html#TYPEcdb_creator">cdb_creator</a></code></pre><div class="info ">
+<div class="info-desc">
+<p>Convert out_channel to cdb_creator.</p>
+</div>
+</div>
+<div class="param_info"><code class="code">out_channel</code> : the out_channel to convert</div>
+
+<pre><span id="VALadd"><span class="keyword">val</span> <a href="code_VALCdb.add.html">add</a></span> : <code class="type"><a href="Cdb.html#TYPEcdb_creator">cdb_creator</a> -&gt; string -&gt; string -&gt; unit</code></pre><div class="info ">
+<div class="info-desc">
+<p>Add a value to the cdb</p>
+</div>
+</div>
+
+<pre><span id="VALclose_cdb_out"><span class="keyword">val</span> <a href="code_VALCdb.close_cdb_out.html">close_cdb_out</a></span> : <code class="type"><a href="Cdb.html#TYPEcdb_creator">cdb_creator</a> -&gt; unit</code></pre><div class="info ">
+<div class="info-desc">
+<p>Close and finish the cdb creator.</p>
+</div>
+</div>
+<h2 id="1_IteratingaCDB">Iterating a CDB </h2>
+<pre><span id="VALiter"><span class="keyword">val</span> <a href="code_VALCdb.iter.html">iter</a></span> : <code class="type">(string -&gt; string -&gt; (unit -&gt; unit) -&gt; unit -&gt; unit) -&gt; string -&gt; unit</code></pre><div class="info ">
+<div class="info-desc">
+<p>Iterate a CDB.</p>
+</div>
+</div>
+<div class="param_info"><code class="code">f</code> : the function to call for every key/value pair</div>
+<div class="param_info"><code class="code">fn</code> : the name of the cdb to iterate</div>
+<h2 id="1_Searching">Searching </h2>
+<pre><code><span id="TYPEcdb_file"><span class="keyword">type</span> <code class="type"></code>cdb_file</span> = {</code></pre><table class="typetable">
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code><span id="TYPEELTcdb_file.f">f</span>&nbsp;: <code class="type">Stdlib.in_channel</code>;</code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code><span id="TYPEELTcdb_file.tables">tables</span>&nbsp;: <code class="type">(Stdlib.Int32.t * int) array</code>;</code></td>
+
+</tr></table>
+<code>}</code>
+
+<div class="info ">
+<div class="info-desc">
+<p>Type type of a cdb_file.</p>
+</div>
+</div>
+
+
+<pre><span id="VALopen_cdb_in"><span class="keyword">val</span> <a href="code_VALCdb.open_cdb_in.html">open_cdb_in</a></span> : <code class="type">string -&gt; <a href="Cdb.html#TYPEcdb_file">cdb_file</a></code></pre><div class="info ">
+<div class="info-desc">
+<p>Open a CDB file for searching.</p>
+</div>
+</div>
+<div class="param_info"><code class="code">fn</code> : the file to open</div>
+
+<pre><span id="VALclose_cdb_in"><span class="keyword">val</span> <a href="code_VALCdb.close_cdb_in.html">close_cdb_in</a></span> : <code class="type"><a href="Cdb.html#TYPEcdb_file">cdb_file</a> -&gt; unit</code></pre><div class="info ">
+<div class="info-desc">
+<p>Close a cdb file.</p>
+</div>
+</div>
+<div class="param_info"><code class="code">cdf</code> : the cdb file to close</div>
+
+<pre><span id="VALget_matches"><span class="keyword">val</span> <a href="code_VALCdb.get_matches.html">get_matches</a></span> : <code class="type"><a href="Cdb.html#TYPEcdb_file">cdb_file</a> -&gt; string -&gt; string Stdlib.Seq.t</code></pre><div class="info ">
+<div class="info-desc">
+<p>Get a stream of matches.</p>
+</div>
+</div>
+<div class="param_info"><code class="code">cdf</code> : the cdb file</div>
+<div class="param_info"><code class="code">key</code> : the key to search</div>
+
+<pre><span id="VALfind"><span class="keyword">val</span> <a href="code_VALCdb.find.html">find</a></span> : <code class="type"><a href="Cdb.html#TYPEcdb_file">cdb_file</a> -&gt; string -&gt; string</code></pre><div class="info ">
+<div class="info-desc">
+<p>Find the first record with the given key.</p>
+</div>
+</div>
+<div class="param_info"><code class="code">cdf</code> : the cdb_file</div>
+<div class="param_info"><code class="code">key</code> : the key to find</div>
+</body></html>

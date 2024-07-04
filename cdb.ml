@@ -125,7 +125,7 @@ let process_table cdc table_start slot_table slot_pointers i tc =
 
 		(* Find an available hash bucket *)
 		let rec find_where where =
-			if (Extoption.is_none ht.(where)) then (
+			if (Option.is_none ht.(where)) then (
 				where
 			) else (
 				if ((where + 1) = len) then (find_where 0)
@@ -209,11 +209,11 @@ let iter f fn =
 				then (
 				let klen = read_le fin in
 				let dlen = read_le fin in
-				let key = String.create klen in
-				let data = String.create dlen in
+				let key = Bytes.create klen in
+				let data = Bytes.create dlen in
 				really_input fin key 0 klen;
 				really_input fin data 0 dlen;
-				f key data;
+				f (Bytes.to_string key) (Bytes.to_string data)
 				loop()
 			) in
 		loop();
@@ -263,9 +263,9 @@ let get_matches cdf key =
 	let hpos, hlen = cdf.tables.(hash_to_table kh) in
 	let incr_slot x = (if (1 + x) > hlen then 0 else (1 + x)) in
 	let rec loop x =
-		if(x >= hlen) then (
+		if x >= hlen then
 			None
-		) else (
+		else
 			(* Calculate the slot containing these entries *)
 			let lslot = ((hash_to_bucket kh hlen) + x) mod hlen in
 			let spos = Int32.add (Int32.of_int (lslot * 8)) hpos in
@@ -273,28 +273,25 @@ let get_matches cdf key =
 			let h = read_le32 cdf.f in
 			let pos = read_le32 cdf.f in
 			(* validate that we a real bucket *)
-			if (h = kh) && ((Int32.compare pos Int32.zero) > 0) then (
+			if h = kh && Int32.compare pos Int32.zero > 0 then (
 				LargeFile.seek_in cdf.f (Int64.of_int32 pos);
 				let klen = read_le cdf.f in
-				if (klen = String.length key) then (
+				if klen = String.length key then (
 					let dlen = read_le cdf.f in
-					let rkey = String.create klen in
+					let rkey = Bytes.create klen in
 					really_input cdf.f rkey 0 klen;
-					if(rkey = key) then (
-						let rdata = String.create dlen in
+					if Bytes.to_string rkey = key then (
+						let rdata = Bytes.create dlen in
 						really_input cdf.f rdata 0 dlen;
-						Some(rdata)
-					) else (
-						loop (x + 1)
-					)
-				) else (
-					loop (x + 1)
-				)
-			) else (
-				loop (x + 1)
-			)
-		) in
-	Stream.from loop
+						Some (Bytes.to_string rdata, incr_slot x)	(* Return the value and the next state *)
+					) else
+						loop (incr_slot x)
+				) else
+					loop (incr_slot x)
+			) else
+				loop (incr_slot x)
+	in
+	Seq.unfold loop 0
 
 (**
  Find the first record with the given key.
@@ -303,7 +300,6 @@ let get_matches cdf key =
  @param key the key to find
  *)
 let find cdf key =
-	try
-		Stream.next (get_matches cdf key)
-	with Stream.Failure ->
-		raise Not_found
+	match Seq.uncons (get_matches cdf key) with
+	| Some (value, _) -> value
+	| None -> raise Not_found

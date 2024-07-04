@@ -14,13 +14,14 @@ type cdb_creator = {
   out : out_channel;
 }
 val open_out : string -> cdb_creator
-val cdb_creator_of_out_channel : Pervasives.out_channel -> cdb_creator
+val cdb_creator_of_out_channel : Stdlib.out_channel -> cdb_creator
 val add : cdb_creator -> string -> string -> unit
 val close_cdb_out : cdb_creator -> unit
 
 (** {1 Iterating a CDB } *)
 
-val iter : (string -> string -> unit) -> string -> unit
+val iter : (string -> string -> (unit -> unit) -> unit -> unit) ->
+				 string -> unit
 
 (** {1 Searching } *)
 
@@ -32,7 +33,7 @@ type cdb_file = {
 val open_cdb_in : string -> cdb_file
 val close_cdb_in : cdb_file -> unit
 
-val get_matches : cdb_file -> string -> string Stream.t
+val get_matches : cdb_file -> string -> string Seq.t
 val find : cdb_file -> string -> string
 
 (*
