@@ -1,0 +1,23 @@
+opam-version: "2.0"
+name: "cdb"
+version: "1.0.0"
+synopsis: "CDB implementation in OCaml"
+description: """
+CDB (Constant Database) is a fast, reliable, simple package for creating
+and reading constant databases.
+"""
+maintainer: "jesse <jesse@createthis.com>"
+authors: "Dustin Sallings <dustin@spy.net>"
+license: "MIT"
+homepage: "https://github.com/createthis/ocaml-cdb"
+bug-reports: "https://github.com/createthis/ocaml-cdb/issues"
+depends: [
+  "ocaml" {>= "4.08.0"}
+  "dune" {>= "2.0"}
+]
+build: [
+  ["dune" "build" "-p" name]
+]
+install: [
+  ["dune" "install" "-p" name]
+]

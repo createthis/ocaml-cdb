@@ -1,0 +1,10 @@
+(lang dune 2.0)
+(name cdb)
+(version 1.0.0)
+(license MIT)
+(authors "Dustin Sallings")
+(maintainers "Jesse <jesse@createthis.com>")
+(homepage "https://github.com/createthis/ocaml-cdb")
+(bug_reports "https://github.com/createthis/ocaml-cdb/issues")
+(source
+ (github createthis/ocaml-cdb))

@@ -8,6 +8,7 @@
 my_program
 test.cdb
 my_cdb.cdb
+_build
 
 # vim
 **/*.swp

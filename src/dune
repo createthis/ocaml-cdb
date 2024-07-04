@@ -1,0 +1,4 @@
+(library
+ (name cdb)
+ (public_name cdb)
+ (libraries))

@@ -1,7 +1,5 @@
 (*
  * Copyright (c) 2003  Dustin Sallings <dustin@spy.net>
- *
- * arch-tag: 1E3B7401-2AE1-11D8-A379-000393CB0F1E
  *)
 
 (** CDB Implementation.
@@ -23,7 +21,6 @@ type cdb_creator = {
 (** Initial hash value *)
 let hash_init = Int64.of_int 5381
 
-let ff64 = Int64.of_int 0xff
 (* I need to do this of_string because it's larger than an ocaml int *)
 let ffffffff64 = Int64.of_string "0xffffffff"
 let ff32 = Int32.of_int 0xff
@@ -119,7 +116,7 @@ let process_table cdc table_start slot_table slot_pointers i tc =
 		with Not_found -> (Int32.zero,Int32.zero)
 	in
 	(* from 0 to tc-1 because the loop will run an extra time otherwise *)
-	for u = 0 to (tc - 1) do
+	for _ = 0 to (tc - 1) do
 		let hp = lookupSlot !cur_p in
 		cur_p := !cur_p + 1;
 
@@ -237,7 +234,7 @@ let open_cdb_in fn =
 	let fin = open_in_bin fn in
 	let tables = Array.make 256 (Int32.zero,0) in
 	(* Set the positions and lengths *)
-	Array.iteri (fun i it ->
+	Array.iteri (fun i _ ->
 		let pos = read_le32 fin in
 		let len = read_le fin in
 		tables.(i) <- (pos,len)
