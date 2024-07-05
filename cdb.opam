@@ -1,6 +1,6 @@
 opam-version: "2.0"
 name: "cdb"
-version: "1.0.0"
+version: "1.0.1"
 synopsis: "CDB implementation in OCaml"
 description: """
 CDB (Constant Database) is a fast, reliable, simple package for creating
@@ -12,7 +12,7 @@ license: "MIT"
 homepage: "https://github.com/createthis/ocaml-cdb"
 bug-reports: "https://github.com/createthis/ocaml-cdb/issues"
 depends: [
-  "ocaml" {>= "4.08.0"}
+  "ocaml" {>= "5.00.0"}
   "dune" {>= "2.0"}
 ]
 build: [
